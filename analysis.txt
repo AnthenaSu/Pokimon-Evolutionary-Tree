@@ -1,0 +1,125 @@
+
+========================================================================
+                          Complexity Analysis
+========================================================================
+
+NOTE:
+- Your time complexities should be in big-O notation.
+- Your time complexities should be in terms of one or more of the
+  following variables:
+  - n, the size of the evolutionary tree
+  - h, the height of the evolutionary tree
+  - k, the size of the speciesNumbers array (for EvoTreeCommonAncestor
+    only)
+
+-------------------------
+  EvoTreeCommonAncestor
+-------------------------
+
+Worst-case time complexity: O(k + h)
+
+Explanation: 
+EvoTreeCommonAncestor() uses the following loops / functions: 
+  - findMin(): a helper function that finds the minimum valid species number in the arrray
+  - findMax(): a helper function that finds the maximum valid species number in the array
+  - NodeCommonAncestor(): helper function that finds the lowest common ancestor of a group of species in a binary search tree by identifying the node whose speciesNumber lies between the minimum and maximum values in the given list.
+
+The worst-case time complexity of findMin() is O(k) where k is the size of speciesNumbers array. Ideally, the minimum species number would be the first element in a sorted array.
+However, the elements can be numbers that are not the EvoTree species numbers. As a result, the worst case happens when the last elemtn in the speciesNumbers[] array is the minimum & valid speciesNumber. 
+Therefore, worst-case time complexity of findMin() is O(k).
+
+The worst-case time complexity of findMax() is O(k). Ideally, the maximum speciesNumber in the ascending sorted array list is the last element. 
+However, the elements can include numbers that are not species numbers in the evolutionary tree. As a result, the worst case happens when the first elemtn in the speciesNumbers[] array is the maximum & valid speciesNumber. 
+Therefore, worst-case time complexity of findMax() is O(k).
+
+After determining the valid range (min & max), the NodeCommonAncestor() function finds the lowest speciesNumber (closest ancestors) in the binary search tree. Since the function recurrsively travereses the tree from the top to bottom, the best-case happens when the head of the tree (et->root) is the cloest commn ancestor.
+If the current speciesNumber is larger than max (too big), it returns its left node and there is no need to check the rest of the left node. Same thing applies to the other side. This indicates that my function depends on the height of the tree. 
+Therefore, the worst-case time complexity of NodeCommonAncestor() is O(h), where h is the height of the tree.
+
+Overall Time Complexity:
+The three functions are independent of each other, and their time complexities are additive. 
+Together, the worst-case time complexity for EvoTreeCommonAncestor() is:
+        O(k) + O(k) + O(h)
+    =   O(2 * k + h)
+    =   O(k + h)            ... simplification drops the constant multiplier.
+
+
+-------------------------
+  EvoTreeEvolutionPath
+-------------------------
+
+Worst-case time complexity: O(h)
+
+Explanation: 
+EvoTreeEvolutionPath() uses the following loops / functions: 
+  - EvoTreeCommonAncestor(): a function that returns the most recent common ancestor of all the valid species numbers in the array.
+  - findAncestor(): a hlper function that returns ancestor node given the ancestor number. 
+  - ADTevolutionPath(): a helper function that builds the evolution path from speciesNumberA to the common ancestor using a stack.
+  - ADTevolutionQueue(): a helper function that builds the evolution path from the common ancestor to speciesNumberB using a queue.
+
+The worst-case time complexity of EvoTreeCommonAncestor() is O(2 + h) = O(h), since the number of species k is constant (k = 2) and the traversal down the tree takes at most height h. Detailed explanation can be found above.
+
+The worst-case time complexity for findAncestor() is O(h). This function returns pointer of the ancestor node and keeps traversing down if not found. Thus, the time complexity depends on the height of the tree (h).
+The worst case happens when the ancestor is really deep (near leaves) in the binary search tree. 
+Therefore, the worst-case complexity is O(h).
+
+The worst-case happends when the worst-case occurs when the ancestor is the root (top of the tree), and both speciesNumberA and speciesNumberB are located deep in opposite branches.
+ADTevolutionPath() first traverses from ancestorNode to speciesNumberA. Then, it pushes each visited node onto a stack, which is O(h) operations. Lastly, it pops all items from the stack and store into path[] which is O(h) operations.
+Therefore, the worst-case time complexity of ADTevolutionPath() is O(h).
+
+ADTevolutionQueue() first traverses from ancestorNode to speciesNumberB. Then, it enqueues each visited node with time complexity O(h). Lastly. it dequeues nodes and store them into path[], skipping the duplicate ancestor with time complexity O(h).
+Therefore, the worst-case time complexity of ADTevolutionQueue() is O(h).
+
+The four functions are independent of each other, and their time complexities are additive. 
+Together, the worst-case time complexity for EvoTreeEvolutionPath() is:
+        = O(h) + O(h) + O(h) + O(h)
+        = O(4 * h)
+        = O(h)            ... simplification drops the constant multiplier.
+
+
+
+-------------------------
+    EvoTreeConstruct
+-------------------------
+
+Worst-case time complexity: O(n^2)
+
+Explanation: 
+The worst case occurs when the input array causes the BST to be highly unbalanced (strictly increasing or decreasing species numbers).
+First, EvoTreeConstruct() creates a root. The time complexity is always O(1). Then, it finds root's right child by using a backward scan through up to n elements. The worst-case time complexitty is O(n). After that, it finds root's left child by using another backward scan.  The worst-case time complexitty is O(n).
+Lastly, it inserts the remaining n - 1 nodes via EvoTreeInsert(). The worst-case time is O(h) required in Part 1 of the assignment. 
+Together, the worst-case time complexity for EvoTreeConstruct() is: O(n).
+
+
+========================================================================
+        Design Documentation for Generating Intermediate Species
+========================================================================
+
+If you completed the intermediate species function, you must explain the
+design and implementation of your solution here.
+
+
+EvoTreeGenerateIntermediate() uses the following helper functions:
+  - bstPreOrder(): Performs a pre-order traversal of the BST to check the gap between every gap. At each node, it checks whether the gap between the parent and its children exceeds the acceptable gap. If so, it generates and inserts intermediate species accordingly.
+  - newSpeciesAmount(): Calculates the number of intermediate species needed between two species numbers, given an acceptable gap.
+  - nameGenerator(): Generates a name for a single intermediate species by concatenating the names of the parent (max) and child (min) species.
+  - multiNameGenerator(): Generates a unique name for one of multiple intermediate species by concatenating the max and min species names, followed by a number suffix.
+
+Traversal and Insertion Strategy: 
+  In EvoTreeGenerateIntermediate(), we call bstPreOrder() with the tree, root node, acceptable gap, and a pointer to totalGenerated. 
+  Since it is a pre-order traversal, we check node, left, then right. We call the curr node parent and the next node (curr->left / curr->right). We passed the parent and child species numbers into newSpeciesAmount(). Then, add the return value to the pointer *totalGenerated. (If there is no need intermediate value, (*totalGenerated) += 0).
+  Next, we use an if statement to distinguish whether we need one intermediate or multiple intermediates. 
+    - If we only need one intermediate, we simply call nameGenerator(), passing parent and child node to generate a new name. After that, we call the Part I function EvoTreeInsert(), passing the new name and an acceptable species number (which I used parent number - accectableGap). Free the new name after inserting into BST to prevent memory leak. 
+    - If we need multiple intermediates, we uses for loop that  
+        1. calls the function multiNameGenerator() to generate new names
+        2. malloc struct node then assign the new name  andnumber. 
+        3. inserts into the EvoTree
+        4. free the new name after using it to prevent memory leak 
+        5. index ++ (index is the number suffix for new names)
+        6. continue this for loop until new species number <= child species number 
+  This strategy applies to both left and right sides. 
+
+Name Generation Strategy: 
+  According to instruction, new name = parent name + child name. 
+  - Single Intermediate Name: Memory allocated for the name is strlen(parent) + strlen(child) + 1 (for \0).
+  - Multiple Intermediates: new name = parent name + child name + suffix. Memory allocated is strlen(parent) + strlen(child) + 2 (for one-digit suffix and \0). multiNameGenerator() has an int pointer called *index which tells us the suffix number. To convert it from int to char, we need to add 48 (ascii of '0') and uses (char) to change type. 
