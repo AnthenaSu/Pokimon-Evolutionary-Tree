@@ -1,6 +1,17 @@
 # Pokimon-Evolutionary-Tree
 Implemented an Evolutionary Tree Abstract Data Types (ADT) in C using a binary search tree to model Pokémon species relationships. Supports insertion, traversal, ancestry and relative queries, evolution path finding, tree reconstruction from traversal data, and generation of intermediate species using stacks, queues, and recursive algorithms.
 
+## Project Structure
+
+| File | Description |
+|-----|-------------|
+| `Makefile` | Controls compilation and build targets for the project. |
+| `EvoTree.h` | Public interface for the Evolutionary Tree ADT (provided; not modified). |
+| `EvoTree.c` | Implementation of the Evolutionary Tree ADT. |
+| `EvoTreeStructs.h` | Definitions of internal data structures used by the ADT. |
+| `testEvoTree.c` | Driver program containing basic tests for the Evolutionary Tree ADT. |
+| `analysis.txt` | Time complexity analysis for selected ADT functions. |
+
 ## Features
 - **BST-based species storage** (`speciesNumber` as the key)
 - **Basic operations:** create, insert, find, count, print (in-order)
@@ -12,8 +23,8 @@ Implemented an Evolutionary Tree Abstract Data Types (ADT) in C using a binary s
 - **Tree reconstruction:** `EvoTreeConstruct()` builds from post-order traversal data
 - **Gap filling:** `EvoTreeGenerateIntermediate()` inserts intermediate species when gaps exceed an acceptable threshold
 - Uses **Stack** and **Queue** ADTs (linked-list based) for path queries
-## EvoTree API Overview
 
+## EvoTree API Overview
 ### Core Operations
 
 | Function | Signature | Description | Time Complexity |
