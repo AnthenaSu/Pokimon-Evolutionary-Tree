@@ -51,7 +51,7 @@ Implemented an Evolutionary Tree Abstract Data Types (ADT) in C using a binary s
 
 | Function | Signature | Description | Time Complexity |
 |--------|-----------|-------------|-----------------|
-| `EvoTreeCommonAncestor` | `Species EvoTreeCommonAncestor(EvoTree et, int speciesNumbers[], int size)` | Returns the most recent common ancestor of all valid species numbers. | **O(k + h)** |
+| `EvoTreeCommonAncestor` | `Species EvoTreeCommonAncestor(EvoTree et, int speciesNumbers[], int size)` | Returns the most recent common ancestor of all valid species numbers. | **O(n + h)** |
 | `EvoTreeEvolutionPath` | `int EvoTreeEvolutionPath(EvoTree et, int speciesNumberA, int speciesNumberB, Species path[])` | Stores the path connecting two species via their common ancestor. | **O(h)** |
 
 ---
