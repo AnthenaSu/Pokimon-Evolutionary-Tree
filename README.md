@@ -14,7 +14,7 @@ Implemented an Evolutionary Tree Abstract Data Types (ADT) in C using a binary s
 
 ## Features
 - **BST-based species storage** (`speciesNumber` as the key)
-- **Basic operations:** create, insert, find, count, print (in-order)
+- **Basic operations:** create, insert, find, count, print
 - **Relationship queries:**
   - `EvoTreeHistory()` — path from root to a species (most recent first)
   - `EvoTreeRelatives()` — species within a numeric `width` range
